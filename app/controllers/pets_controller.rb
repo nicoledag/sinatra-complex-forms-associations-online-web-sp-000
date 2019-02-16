@@ -10,19 +10,30 @@ class PetsController < ApplicationController
     erb :'/pets/new'
   end
 
-  post '/pets' do
-   if !params["owner_name"].empty?
-     @pet = Pet.create(name: params[:pet_name])
-     @pet.owner = Owner.create(name: params[:owner_name])
-     @pet.save
-   else
-     @pet = Pet.create(name: params[:pet_name])
-     @owner = Owner.find_by(params[:owner_name])
-     @pet.owner = @owner
-     @pet.save
-   end
-   redirect to "pets/#{@pet.id}"
+ #  post '/pets' do
+ #   if !params["owner_name"].empty?
+ #     @pet = Pet.create(name: params[:pet_name])
+ #     @pet.owner = Owner.create(name: params[:owner_name])
+ #     @pet.save
+ #   else
+ #     @pet = Pet.create(name: params[:pet_name])
+ #     @owner = Owner.find_by(params[:owner_name])
+ #     @pet.owner = @owner
+ #     @pet.save
+ #   end
+ #   redirect to "pets/#{@pet.id}"
+ # end
+
+ post '/pets' do
+   binding.pry
+   @pet = Pet.create(params[:pet_name])
+    if !params["owner_name"].empty?
+      @pet.owner << Owner.create(name: params[:owner_name])
+     end
+    redirect to "pets/#{@pet.id}"
  end
+
+
 
   get '/pets/:id' do
     @pet = Pet.find(params[:id])
